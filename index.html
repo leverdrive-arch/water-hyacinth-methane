@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,18 +24,18 @@ input,select{width:100%;padding:11px 12px;border:1px solid #cbd8e4;border-radius
   <div class="brand">BIOENERGY · CALCULATION TOOL</div>
   <div class="hero">
     <div><h1>Water Hyacinth<br>Methane Calculator</h1>
-    <p>เครื่องมือประเมินศักยภาพการผลิตก๊าซมีเทนจากผักตบชวา สำหรับการศึกษาและโครงงานพลังงานชีวภาพ</p></div>
+    <p>Estimate methane production potential from water hyacinth for educational and bioenergy projects.</p></div>
     <div class="hero-mark" aria-hidden="true">♻</div>
   </div>
 </header>
 <main>
-  <div class="notice"><strong>หมายเหตุสำคัญ:</strong> ผลลัพธ์เป็นค่าประมาณตามสมมติฐานที่กรอก ไม่ใช่การรับประกันผลผลิตจริง ค่าตั้งต้น TS 10% เป็นเพียงตัวอย่างสมมติ และควรแทนที่ด้วยข้อมูลวิเคราะห์ของผักตบชวาที่ใช้จริง</div>
+  <div class="notice"><strong>Scientific limitation:</strong> Results are estimates based on the entered assumptions, not guaranteed real-world yields. The default TS value of 10% is illustrative; replace it with laboratory data for your actual feedstock.</div>
   <div class="layout">
     <section class="panel">
-      <h2>ข้อมูลวัตถุดิบและการหมัก</h2>
-      <p class="sub">กรอกน้ำหนักได้ตามต้องการ ไม่มีการจำกัดจำนวนกิโลกรัมในสูตรคำนวณ</p>
+      <h2>Feedstock & Digestion Inputs</h2>
+      <p class="sub">Enter the amount you want to model. The calculation has no fixed mass limit.</p>
       <div class="field">
-        <label for="mass">น้ำหนักผักตบชวาสด <span class="hint">ต้องมากกว่า 0</span></label>
+        <label for="mass">Fresh water hyacinth mass <span class="hint">Must be greater than 0</span></label>
         <div class="unit"><input id="mass" type="number" min="0.000001" step="any" value="1"><span>kg</span></div>
       </div>
       <div class="grid2">
@@ -43,65 +43,99 @@ input,select{width:100%;padding:11px 12px;border:1px solid #cbd8e4;border-radius
         <div class="field"><label for="vs">VS / TS</label><div class="unit"><input id="vs" type="number" min="0" max="100" step="any" value="84.82"><span>%</span></div></div>
       </div>
       <div class="field">
-        <label for="yield">ผลผลิตมีเทนจำเพาะ <span class="hint">ปรับได้ตามแหล่งข้อมูล</span></label>
+        <label for="yield">Specific methane yield <span class="hint">Editable to match a cited study</span></label>
         <div class="unit"><input id="yield" type="number" min="0" step="any" value="213.92"><span>L CH₄ / kg VS</span></div>
       </div>
       <div class="field">
-        <label for="basis">ฐานน้ำหนักที่กรอก</label>
-        <select id="basis"><option value="wet" selected>น้ำหนักผักตบชวาสด (kg)</option><option value="dry">น้ำหนักของแข็งทั้งหมด TS (kg)</option><option value="vs">น้ำหนักของแข็งระเหยง่าย VS (kg)</option></select>
-        <div class="hint" style="margin-top:5px">เลือกให้ตรงกับข้อมูลน้ำหนักที่คุณมี</div>
+        <label for="basis">Input mass basis</label>
+        <select id="basis"><option value="wet" selected>Fresh water hyacinth mass (kg)</option><option value="dry">Total solids (TS) mass (kg)</option><option value="vs">Volatile solids (VS) mass (kg)</option></select>
+        <div class="hint" style="margin-top:5px">Choose the basis that matches your input data.</div>
       </div>
-      <div class="btnrow"><button class="btn primary" id="calc">คำนวณผลผลิต</button><button class="btn secondary" id="reset">คืนค่าเริ่มต้น</button></div>
+      <div class="btnrow"><button class="btn primary" id="calc">Calculate estimate</button><button class="btn secondary" id="reset">Reset inputs</button></div>
       <hr class="divider">
-      <div class="formula"><strong>สูตร:</strong><br>VS (kg) = น้ำหนักสด × TS% × VS/TS%<br>มีเทน (L) = VS (kg) × ผลผลิตมีเทนจำเพาะ (L/kg VS)<br><span class="hint">เมื่อเลือกฐาน TS หรือ VS ระบบจะตีความน้ำหนักตามฐานที่เลือก</span></div>
+      <div class="formula"><strong>Calculation formula:</strong><br>TS (kg) = fresh mass × TS%<br>VS (kg) = TS (kg) × VS/TS%<br>Methane (L) = VS (kg) × specific methane yield (L/kg VS)<br><span class="hint">When TS or VS is selected, the entered mass is interpreted using that basis.</span></div>
     </section>
     <section class="panel">
-      <h2>ผลการคำนวณ</h2><p class="sub">ค่าประมาณสำหรับชุดข้อมูลปัจจุบัน · ผลลัพธ์อัปเดตอัตโนมัติเมื่อแก้ไขตัวเลข</p>
-      <div class="results"><div class="result-label">ปริมาตรก๊าซมีเทนโดยประมาณ</div><div class="big" id="litres">18.15 <small>L CH₄</small></div><div id="cubic" style="font-size:14px;color:#526b7e">0.01815 m³ CH₄</div></div>
+      <h2>Calculation Results</h2><p class="sub">Estimate for the current inputs · results update automatically when values change</p>
+      <div class="results"><div class="result-label">Estimated purified methane volume (CH₄)</div><div class="big" id="litres">18.15 <small>L CH₄</small></div><div id="cubic" style="font-size:14px;color:#526b7e">0.01815 m³ CH₄</div></div>
       <div class="mini-results">
-        <div class="mini"><div class="label">น้ำหนัก VS ที่คำนวณได้</div><div class="num" id="vsMass">0.08482 kg</div></div>
-        <div class="mini"><div class="label">ปริมาตรมีเทนต่อ VS</div><div class="num" id="specific">213.92 L/kg</div></div>
-        <div class="mini"><div class="label">น้ำหนัก TS ที่คำนวณได้</div><div class="num" id="tsMass">0.10000 kg</div></div>
-        <div class="mini"><div class="label">พลังงานมีเทนโดยประมาณ*</div><div class="num" id="energy">0.18 kWh</div></div>
+        <div class="mini"><div class="label">Calculated VS mass</div><div class="num" id="vsMass">0.08482 kg</div></div>
+        <div class="mini"><div class="label">Methane yield per VS</div><div class="num" id="specific">213.92 L/kg</div></div>
+        <div class="mini"><div class="label">Calculated TS mass</div><div class="num" id="tsMass">0.10000 kg</div></div>
+        <div class="mini"><div class="label">Estimated methane energy*</div><div class="num" id="energy">0.18 kWh</div></div>
       </div>
-      <p class="foot">* พลังงานคำนวณโดยใช้ค่าความร้อนโดยประมาณ 9.94 kWh ต่อ m³ มีเทน ไม่ใช่ไฟฟ้าที่ผลิตได้จริง</p>
+      <p class="foot">* Energy uses an approximate methane heating value of 9.94 kWh/m³. This is fuel energy, not actual electricity generated.</p>
       <div id="error" style="display:none;color:#a33;font-size:13px;margin-top:10px"></div>
     </section>
   </div>
-  <div class="section-title"><h2>ประวัติการคำนวณ</h2><div class="btnrow"><button class="btn secondary" id="export">ส่งออก CSV</button><button class="btn danger" id="clear">ล้างประวัติ</button></div></div>
-  <div class="tablewrap"><table><thead><tr><th>เวลา</th><th>น้ำหนักที่กรอก</th><th>ฐานน้ำหนัก</th><th>VS (kg)</th><th>มีเทน (L)</th><th>มีเทน (m³)</th><th></th></tr></thead><tbody id="history"><tr><td colspan="7" class="empty">ยังไม่มีรายการ — กด “คำนวณผลผลิต” เพื่อบันทึกผล</td></tr></tbody></table></div>
-  <p class="foot">เวอร์ชันต้นแบบทำงานในเบราว์เซอร์นี้ ประวัติจะอยู่ในหน้าที่เปิดอยู่เท่านั้น ยังไม่มีบัญชีผู้ใช้หรือฐานข้อมูลออนไลน์</p>
-  <p class="foot"><strong>แนวทางปรับปรุง:</strong> เพิ่มแหล่งอ้างอิงรายค่าที่เลือกได้, แยกผลผลิตก๊าซชีวภาพกับมีเทน, เพิ่มช่วงค่าต่ำ–สูง และบันทึกข้อมูลถาวรเมื่อพัฒนาเป็นระบบออนไลน์</p>
+  <section class="panel" style="margin-top:20px">
+    <h2>Estimated Revenue — Purified Methane (CH₄)</h2>
+    <p class="sub">A market-reference proxy based on Asian spot LNG, converted to an energy-equivalent value. This is not a confirmed biomethane purchase offer.</p>
+    <div class="grid2">
+      <div class="field"><label for="lngPrice">Asian spot LNG reference price <span class="hint">Q1 2026 average</span></label><div class="unit"><input id="lngPrice" type="number" min="0" step="any" value="14.22"><span>USD/MMBtu</span></div></div>
+      <div class="field"><label for="fx">Exchange rate <span class="hint">Editable reference</span></label><div class="unit"><input id="fx" type="number" min="0.000001" step="any" value="33.66"><span>THB/USD</span></div></div>
+    </div>
+    <div class="formula"><strong>Pricing method:</strong> reference price (USD/MMBtu) × exchange rate (THB/USD) × methane energy (MMBtu/m³). Energy conversion uses 9.94 kWh/m³ and 1 MMBtu ≈ 293.071 kWh. The benchmark is an LNG import-market reference, not a direct market quote for locally produced purified methane.</div>
+    <div class="mini-results" style="margin-top:12px">
+      <div class="mini"><div class="label">Implied reference value</div><div class="num" id="priceM3">— THB/m³</div><div class="label" id="priceUSDm3">— USD/m³</div></div>
+      <div class="mini"><div class="label">Estimated gross revenue (THB)</div><div class="num" id="revenueTHB">— THB</div></div>
+      <div class="mini"><div class="label">Estimated gross revenue (USD)</div><div class="num" id="revenueUSD">— USD</div></div>
+      <div class="mini"><div class="label">Estimated methane energy</div><div class="num" id="revenueEnergy">— MMBtu</div></div>
+    </div>
+    <p class="foot"><strong>Important:</strong> This is a gross energy-equivalent estimate before purification, compression, storage, transport, taxes, equipment, and operating costs. Real sale prices depend on purity specifications, delivery method, contract terms, and the buyer. No sale is assumed to be possible without appropriate testing and infrastructure.</p>
+  </section>
+  <section class="panel" style="margin-top:20px">
+    <h2>Scientific References & Assumptions</h2>
+    <ul style="padding-left:20px;font-size:13px">
+      <li>Water hyacinth biomethane potential study: reported methane potential of 213.92 mL CH₄/g VS (equivalent numerically to 213.92 L/kg VS) and VS/TS of 84.82% under the study's specific experimental conditions. These are laboratory values, not a universal yield guarantee. <a href="https://doi.org/10.1039/D2RA00303A" target="_blank" rel="noopener">RSC Advances (2022), DOI: 10.1039/D2RA00303A</a>.</li>
+      <li>Thailand's Energy Policy and Planning Office explains that raw biogas commonly contains about 50–70% methane and that upgrading removes CO₂ and contaminants to produce biomethane, typically around 90–96% methane. <a href="https://www.eppo.go.th/information-services/knowledge-base/kb-conserve-renew-energy/km-article-conserve-renew-energy/biomethane-%E0%B9%84%E0%B8%9A%E0%B9%82%E0%B8%AD%E0%B8%A1%E0%B8%B5%E0%B9%80%E0%B8%97%E0%B8%99/" target="_blank" rel="noopener">EPPO: Biomethane</a>.</li>
+      <li>Market benchmark: PTTEP reported an average Asian spot LNG price of USD 14.22/MMBtu for Q1 2026. LNG is used here only as an energy-equivalent proxy; it is not a direct quote for purified biomethane. <a href="https://market.sec.or.th/public/idisc/Download?FILEID=dat%2Fnews%2F202604%2F0355NWS300420261246333720E.pdf" target="_blank" rel="noopener">PTTEP Q1 2026 MD&amp;A</a>.</li>
+      <li>Exchange rate default: 1 USD ≈ 33.66 THB, an indicative reference for 23 October 2026; rates vary by provider and transaction. Change the input to match the rate you want to use.</li>
+    </ul>
+    <p class="foot">Scientific caveats: the default TS value (10%) is illustrative. Actual water hyacinth moisture and VS content vary by location, season, and handling. The model does not simulate digestion kinetics, methane capture efficiency, gas upgrading losses, or real plant performance. “Purified methane” is a revenue scenario applied to the estimated CH₄ volume; the calculator does not model the cost or efficiency of purification.</p>
+  </section>
+  <div class="section-title"><h2>Calculation History</h2><div class="btnrow"><button class="btn secondary" id="export">Export CSV</button><button class="btn danger" id="clear">Clear history</button></div></div>
+  <div class="tablewrap"><table><thead><tr><th>Timestamp</th><th>Input mass</th><th>Mass basis</th><th>VS (kg)</th><th>Methane (L)</th><th>Methane (m³)</th><th></th></tr></thead><tbody id="history"><tr><td colspan="7" class="empty">No entries yet — click “Calculate estimate” to save a result</td></tr></tbody></table></div>
+  <p class="foot">This prototype runs in your browser. History is kept only while this page remains open; there is no user account or online database.</p>
+  <p class="foot"><strong>Model scope:</strong> This calculator estimates methane potential only. Actual yield depends on feedstock composition, pretreatment, digester conditions, retention time, and gas losses.</p>
 </main>
 <script>
 const $=id=>document.getElementById(id);
 let rows=[];
 const fmt=(n,d=2)=>Number(n).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:0});
+let currentMethaneM3=0;
+function updateRevenue(){
+ const lng=Number($('lngPrice').value),fx=Number($('fx').value);
+ if(!Number.isFinite(lng)||lng<0||!Number.isFinite(fx)||fx<=0){$('priceM3').textContent='Check inputs';$('priceUSDm3').textContent='';$('revenueTHB').textContent='—';$('revenueUSD').textContent='—';$('revenueEnergy').textContent='—';return;}
+ const mmbtuPerM3=9.94/293.071,usdPerM3=lng*mmbtuPerM3,thbPerM3=usdPerM3*fx,energy=currentMethaneM3*mmbtuPerM3;
+ $('priceM3').textContent=fmt(thbPerM3,4)+' THB/m³';$('priceUSDm3').textContent=fmt(usdPerM3,4)+' USD/m³';$('revenueTHB').textContent=fmt(currentMethaneM3*thbPerM3,4)+' THB';$('revenueUSD').textContent=fmt(currentMethaneM3*usdPerM3,4)+' USD';$('revenueEnergy').textContent=fmt(energy,6)+' MMBtu';
+}
 function calculate(save=true){
   const mass=Number($('mass').value),ts=Number($('ts').value),vs=Number($('vs').value),y=Number($('yield').value),basis=$('basis').value;
   const err=$('error');err.style.display='none';
   if(!Number.isFinite(mass)||mass<=0||!Number.isFinite(ts)||ts<0||ts>100||!Number.isFinite(vs)||vs<0||vs>100||!Number.isFinite(y)||y<0){
-    err.textContent='กรุณากรอกน้ำหนักมากกว่า 0 และกรอก TS, VS/TS ระหว่าง 0–100% รวมถึงผลผลิตมีเทนเป็นค่าตั้งแต่ 0 ขึ้นไป';err.style.display='block';return;
+    err.textContent='Enter a mass greater than 0, TS and VS/TS between 0–100%, and a non-negative methane yield.';err.style.display='block';return;
   }
   let tsKg,vsKg;
   if(basis==='wet'){tsKg=mass*ts/100;vsKg=tsKg*vs/100;}
   else if(basis==='dry'){tsKg=mass;vsKg=mass*vs/100;}
   else {vsKg=mass;tsKg=vs>0?mass/(vs/100):0;}
-  const litres=vsKg*y,m3=litres/1000,energy=m3*9.94;
+  const litres=vsKg*y,m3=litres/1000,energy=m3*9.94;currentMethaneM3=m3;updateRevenue();
   $('litres').innerHTML=fmt(litres,3)+' <small>L CH₄</small>';$('cubic').textContent=fmt(m3,6)+' m³ CH₄';
   $('vsMass').textContent=fmt(vsKg,6)+' kg';$('tsMass').textContent=fmt(tsKg,6)+' kg';$('specific').textContent=fmt(y,3)+' L/kg';$('energy').textContent=fmt(energy,3)+' kWh';
   if(save){
-    rows.unshift({time:new Date().toLocaleString('th-TH'),mass,basis,ts,vs,y,vsKg,litres,m3});
+    rows.unshift({time:new Date().toLocaleString('en-GB'),mass,basis,ts,vs,y,vsKg,litres,m3});
     render();
   }
 }
 function render(){
   const body=$('history');
-  if(!rows.length){body.innerHTML='<tr><td colspan="7" class="empty">ยังไม่มีรายการ — กด “คำนวณผลผลิต” เพื่อบันทึกผล</td></tr>';return;}
-  body.innerHTML=rows.map((r,i)=>`<tr><td>${r.time}</td><td>${fmt(r.mass,4)} kg</td><td>${r.basis==='wet'?'น้ำหนักสด':r.basis==='dry'?'TS':'VS'}</td><td>${fmt(r.vsKg,6)}</td><td>${fmt(r.litres,3)}</td><td>${fmt(r.m3,6)}</td><td><button class="btn danger" data-del="${i}">ลบ</button></td></tr>`).join('');
+  if(!rows.length){body.innerHTML='<tr><td colspan="7" class="empty">No entries yet — click “Calculate estimate” to save a result</td></tr>';return;}
+  body.innerHTML=rows.map((r,i)=>`<tr><td>${r.time}</td><td>${fmt(r.mass,4)} kg</td><td>${r.basis==='wet'?'Fresh mass':r.basis==='dry'?'TS':'VS'}</td><td>${fmt(r.vsKg,6)}</td><td>${fmt(r.litres,3)}</td><td>${fmt(r.m3,6)}</td><td><button class="btn danger" data-del="${i}">Delete</button></td></tr>`).join('');
   body.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{rows.splice(Number(b.dataset.del),1);render()}));
 }
 $('calc').addEventListener('click',()=>calculate(true));
+['lngPrice','fx'].forEach(id=>{ $(id).addEventListener('input',updateRevenue); $(id).addEventListener('change',updateRevenue); });
 ['mass','ts','vs','yield','basis'].forEach(id=>{
   $(id).addEventListener('input',()=>calculate(false));
   $(id).addEventListener('change',()=>calculate(false));
@@ -109,12 +143,13 @@ $('calc').addEventListener('click',()=>calculate(true));
 $('reset').addEventListener('click',()=>{$('mass').value=1;$('ts').value=10;$('vs').value=84.82;$('yield').value=213.92;$('basis').value='wet';calculate(false)});
 $('clear').addEventListener('click',()=>{rows=[];render()});
 $('export').addEventListener('click',()=>{
- if(!rows.length){alert('ยังไม่มีประวัติให้ส่งออก');return}
+ if(!rows.length){alert('There is no history to export yet.');return}
  const headers=['time','input_mass_kg','mass_basis','TS_percent','VS_TS_percent','methane_yield_L_per_kgVS','VS_kg','methane_L','methane_m3'];
  const csv=[headers.join(','),...rows.map(r=>[r.time,r.mass,r.basis,r.ts,r.vs,r.y,r.vsKg,r.litres,r.m3].map(v=>'"'+String(v).replaceAll('"','""')+'"').join(','))].join('\r\n');
  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='water-hyacinth-methane-results.csv';a.click();URL.revokeObjectURL(url);
 });
 calculate(false);
+updateRevenue();
 </script>
 </body>
 </html>
